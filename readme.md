@@ -76,22 +76,28 @@ The `build.sh` script performs the following steps:
 ```sh
 #!/bin/bash
 
-# Assemble the assembly code
+# Assembler le code assembleur
 nasm -f elf64 shellcode.s -o shellcode.o
 
-# Compile the C wrapper
+# Compiler le wrapper C
 gcc -c wrapper.c -o wrapper.o
 
-# Compile the main C program
+# Compiler le programme principal en C
 gcc -c main.c -o main.o
 
-# Link the object files to create the executable
-gcc main.o wrapper.o shellcode.o -o myprogram
+# Lier les fichiers objets pour créer l'exécutable
+gcc main.o wrapper.o shellcode.o -o hello_world
 
-# Make the executable runnable
-chmod +x myprogram
+# Rendre l'exécutable prêt à être exécuté
+chmod +x hello_world
 
-echo "Build completed successfully. You can run ./myprogram to execute the program."
+rm shellcode.o
+rm wrapper.o
+rm main.o
+
+echo "Build completed successfully. You can run ./hello_world to execute the program."
+
+./hello_world
 
 ```
 
