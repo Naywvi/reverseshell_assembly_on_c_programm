@@ -1,106 +1,61 @@
-# Shellcode Integration Exampl
+# 🚀 Reverse Shell Code Execution
 
-## Description
+Bienvenue dans ce projet de démonstration d'exécution de code shell inversé ! Ce projet montre comment intégrer du shellcode dans un programme C et l'exécuter de manière invisible.
 
-This project demonstrates how to integrate assembly code within a C program to execute a reverse shell after displaying a "Hello, World!" message. The reverse shell connects to `localhost` on port `4444`.
+## 📝 Prérequis
 
-## Files
+Assurez-vous que les dépendances suivantes sont installées sur votre système :
 
-- `shellcode.s`: Contains the assembly code for the reverse shell.
-- `wrapper.c`: A C wrapper that allows calling the assembly code from the main C program.
-- `main.c`: The main C program that prints "Hello, World!" and then executes the reverse shell.
-- `build.sh`: A script to compile and link all the files into an executable.
+- `nasm` - Assembleur pour le shellcode
+- `netcat (nc)` - Outil de mise en réseau pour écouter les connexions
+- `gcc` - Compilateur C
 
-## Usage
+## 📜 Description du Projet
 
-### Prerequisites
+Ce projet contient les fichiers suivants :
 
-Ensure you have the following tools installed:
-- `nasm` for assembling the assembly code.
-- `gcc` for compiling and linking the C code.
-- `netcat` (`nc`) for setting up a listener.
+- `reverse_shell.asm` : Le shellcode en Assembly qui crée une connexion inversée.
+- `run.sh` : Un script bash qui assemble, compile et exécute le shellcode avec un programme C minimal.
 
-### Steps
+## 🚀 Utilisation
 
-1. **Make the `build.sh` script executable**:
+### Étapes pour exécuter le script :
 
-    ```sh
-    chmod +x build.sh
-    ```
+1. Assurez-vous que `run.sh` est exécutable (Linux uniquement).
+2. Exécutez le script :
+   ```
+   chmod +x run.sh
+   ./run.sh
+   ```
 
-2. **Run the `build.sh` script to compile and link the program**:
+### Que fait le script `run.sh` ?
 
-    ```sh
-    ./build.sh
-    ```
+1. **Vérifie les dépendances** : Le script s'assure que `nasm`, `nc`, et `gcc` sont installés.
+2. **Ouvre un terminal et démarre Netcat** : Si le port 4444 n'est pas déjà ouvert, il ouvre un terminal et démarre Netcat pour écouter sur le port 4444.
+3. **Assemble le shellcode** : Utilise `nasm` pour assembler `reverse_shell.asm` en un fichier objet.
+4. **Crée un fichier source C minimal** : Génère un fichier `main.c` qui imprime "Hello, World!".
+5. **Compile et lie le programme C avec le shellcode** : Utilise `gcc` pour compiler et lier `main.c` avec `reverse_shell.o` en un exécutable `shellcode_runner`.
+6. **Exécute le programme compilé** : Lance l'exécutable généré.
+7. **Nettoie les fichiers temporaires** : Supprime les fichiers temporaires `main.c` et `reverse_shell.o` de la racine.
 
-3. **Open a separate terminal and start a Netcat listener on port 4444**:
-
-    ```sh
-    nc -lvp 4444
-    ```
-
-4. **Run the compiled program**:
-
-    ```sh
-    ./myprogram
-    ```
-
-    You should see the message "Hello, World!" in your terminal.
-
-5. **Check the Netcat listener terminal**:
-
-    If everything works correctly, you should see a connection and be dropped into a shell session.
-
-## Notes
-
-- This example is designed to run on `localhost` and connects back to `127.0.0.1` on port `4444`.
-- Ensure you have `nasm`, `gcc`, and `netcat` (`nc`) installed on your system.
-- Use this code responsibly and only in controlled environments for educational purposes.
-
-## Troubleshooting
-
-- **Permission Denied**: Ensure you have the necessary permissions to execute the scripts and compiled programs.
-- **Connection Issues**: Make sure the Netcat listener is running before executing the compiled program.
-
-## Build Script Explanation
-
-The `build.sh` script performs the following steps:
-
-1. Assembles the assembly code in `shellcode.s` into an object file.
-2. Compiles the C wrapper in `wrapper.c` into an object file.
-3. Compiles the main C program in `main.c` into an object file.
-4. Links all the object files into a single executable named `myprogram`.
-5. Makes the `myprogram` executable.
-
-```sh
-#!/bin/bash
-
-# Assembler le code assembleur
-nasm -f elf64 shellcode.s -o shellcode.o
-
-# Compiler le wrapper C
-gcc -c wrapper.c -o wrapper.o
-
-# Compiler le programme principal en C
-gcc -c main.c -o main.o
-
-# Lier les fichiers objets pour créer l'exécutable
-gcc main.o wrapper.o shellcode.o -o hello_world
-
-# Rendre l'exécutable prêt à être exécuté
-chmod +x hello_world
-
-rm shellcode.o
-rm wrapper.o
-rm main.o
-
-echo "Build completed successfully. You can run ./hello_world to execute the program."
-
-./hello_world
+## 📁 Structure du Répertoire
 
 ```
+├── README.md
+├── reverse_shell.asm
+├── run.sh
+└── execution_du_code
+├── main.c
+├── reverse_shell.o
+└── shellcode_runner
+```
 
-Copy and paste the above content into your README file. This README provides a detailed explanation of the code, instructions on how to build and run the program, and notes on usage and troubleshooting, without showing the actual code.
+## ⚠️ Avertissement
 
-ps : Naywvi
+**Attention** : L'exécution de ce type de code comporte des risques de sécurité. Utilisez ce projet uniquement dans un environnement de test sécurisé et à des fins éducatives. Ne jamais exécuter de code non vérifié ou potentiellement malveillant sur des systèmes de production.
+
+---
+
+✨ **Créateur** : Naywvi
+
+Profitez de votre exploration de ce projet de démonstration d'exécution de code shell inversé ! 🚀
