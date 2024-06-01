@@ -22,9 +22,11 @@ Ce projet contient les fichiers suivants :
 ### Étapes pour exécuter le script :
 
 1. Assurez-vous que `run.sh` est exécutable (Linux uniquement).
-2. Exécutez le script :
-   ```
+   ```bash
    chmod +x run.sh
+   ```
+2. Exécutez le script :
+   ```sh
    ./run.sh
    ```
 
