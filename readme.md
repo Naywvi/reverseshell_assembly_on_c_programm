@@ -44,10 +44,11 @@ Ce projet contient les fichiers suivants :
 ├── README.md
 ├── reverse_shell.asm
 ├── run.sh
+├── shellcode_runner
 └── execution_du_code
    ├──── main.c
-   ├──── reverse_shell.o
-   └──── shellcode_runner
+   └──── reverse_shell.o
+
 ```
 
 ## ⚠️ Avertissement
