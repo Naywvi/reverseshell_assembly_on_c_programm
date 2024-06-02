@@ -35,10 +35,10 @@ Ce projet montre comment ajouter directement du code dans un fichier exécutable
 │   ├── README.md
 │   ├── run.sh
 │   └── reverse_shell.asm
-├── Linux_Midrashim
-│   ├── README.md
-│   ├── run.sh
-│   └── Linux.Midrashim.asm
+└── Linux_Midrashim
+    ├── README.md
+    ├── run.sh
+    └── Linux.Midrashim.asm
 ```
 
 ## ⚠️ Avertissement
