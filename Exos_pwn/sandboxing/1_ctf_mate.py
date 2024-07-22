@@ -11,7 +11,7 @@ import os
 import time
 import pwn
 
-BINARY = "/challenge/babyjail_level6"
+BINARY = "/challenge/babyjail_level1"
 LIBC = "/usr/lib/x86_64-linux-gnu/libc.so.6"
 LD = "/lib64/ld-linux-x86-64.so.2"
 
